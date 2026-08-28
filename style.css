@@ -906,3 +906,82 @@ button { font: inherit; }
 @media (prefers-reduced-motion: reduce) {
   .floating-window { transition-duration: 1ms; }
 }
+
+
+/* --- Code-drawn gothic outer rail + cursor-wound clock --- */
+
+/* Code-drawn gothic outer rail: thin double ring with
+   pale rectangular bridges between the two rails. */
+.outer-ring-code {
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 93%;
+  height: 93%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(231,233,239,0.66);
+  box-shadow:
+    0 0 4px rgba(255,255,255,0.08),
+    inset 0 0 4px rgba(255,255,255,0.035);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.outer-ring-code::before {
+  content: "";
+  position: absolute;
+  inset: 2.45%;
+  border-radius: 50%;
+  border: 1px solid rgba(220,223,231,0.55);
+  box-shadow: 0 0 2px rgba(255,255,255,0.045);
+}
+
+.outer-ring-segments {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from -1.2deg,
+    rgba(236,238,243,0.78) 0deg 2.35deg,
+    transparent 2.35deg 7.5deg
+  );
+  -webkit-mask: radial-gradient(
+    circle farthest-side at center,
+    transparent 0 95.05%,
+    #000 95.18% 99.72%,
+    transparent 99.9% 100%
+  );
+  mask: radial-gradient(
+    circle farthest-side at center,
+    transparent 0 95.05%,
+    #000 95.18% 99.72%,
+    transparent 99.9% 100%
+  );
+  filter: drop-shadow(0 0 1px rgba(255,255,255,0.15));
+}
+
+/* Character remains above the clock art and rail, while the hands stay above it. */
+.character-stage { z-index: 3; }
+.center-ring { z-index: 4; }
+.hand-rotator { z-index: 6; }
+.minute-rotator { z-index: 6; }
+.hour-rotator { z-index: 7; }
+.center-cap { z-index: 8; }
+.menu { z-index: 9; }
+
+/* Small interpolation keeps the geared minute hand smooth while following the cursor live. */
+.hour-rotator {
+  transition: transform 46ms linear;
+}
+.minute-rotator {
+  transition: transform 58ms linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hour-rotator,
+  .minute-rotator {
+    transition: none;
+  }
+}
