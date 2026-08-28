@@ -301,31 +301,64 @@ function setCharacter(index) {
   }, 720);
 }
 
-function updateHourHand(clientX, clientY) {
+let previousRawHourAngle = null;
+let unwrappedHourAngle = 0;
+let pendingPointer = null;
+let clockAnimationFrame = null;
+
+function pointerAngleFromClock(clientX, clientY) {
   const rect = clockShell.getBoundingClientRect();
   const centerX = rect.left + rect.width / 2;
   const centerY = rect.top + rect.height / 2;
-  const angle = Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI + 90;
-  hourRotator.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+  const degrees = Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI + 90;
+  return (degrees + 360) % 360;
+}
+
+function shortestAngleDelta(from, to) {
+  return ((to - from + 540) % 360) - 180;
+}
+
+function renderClockHands(rawHourAngle) {
+  if (previousRawHourAngle === null) {
+    previousRawHourAngle = rawHourAngle;
+    unwrappedHourAngle = rawHourAngle;
+  } else {
+    unwrappedHourAngle += shortestAngleDelta(previousRawHourAngle, rawHourAngle);
+    previousRawHourAngle = rawHourAngle;
+  }
+
+  /*
+     The hour hand is the driver. One full hour-hand revolution is 12 hours,
+     so the minute hand makes 12 revolutions. Because unwrappedHourAngle keeps
+     direction across 12 o'clock, moving the cursor backwards winds the minute
+     hand backwards smoothly too.
+  */
+  const minuteAngle = unwrappedHourAngle * 12;
+
+  hourRotator.style.transform = `translate(-50%, -50%) rotate(${unwrappedHourAngle}deg)`;
+  minuteRotator.style.transform = `translate(-50%, -50%) rotate(${minuteAngle}deg)`;
+}
+
+function updateClockFromPointer(clientX, clientY) {
+  renderClockHands(pointerAngleFromClock(clientX, clientY));
+}
+
+function scheduleClockPointerUpdate(clientX, clientY) {
+  pendingPointer = { clientX, clientY };
+  if (clockAnimationFrame !== null) return;
+
+  clockAnimationFrame = requestAnimationFrame(() => {
+    clockAnimationFrame = null;
+    if (!pendingPointer) return;
+    const { clientX: x, clientY: y } = pendingPointer;
+    pendingPointer = null;
+    updateClockFromPointer(x, y);
+  });
 }
 
 scene.addEventListener('pointermove', event => {
-  updateHourHand(event.clientX, event.clientY);
+  scheduleClockPointerUpdate(event.clientX, event.clientY);
 });
-
-const STAR_COUNT = 24;
-const STAR_STEP = 360 / STAR_COUNT;
-let minuteStarIndex = 0;
-
-function setMinuteHandToStar(index) {
-  const angle = index * STAR_STEP;
-  minuteRotator.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
-}
-
-function tickMinuteHand() {
-  minuteStarIndex = (minuteStarIndex + 1) % STAR_COUNT;
-  setMinuteHandToStar(minuteStarIndex);
-}
 
 function updatePuzzleDisplay() {
   puzzleCount.textContent = `${collectedPieces.size}/${PUZZLE_TOTAL}`;
@@ -505,7 +538,5 @@ windowHandle.addEventListener('pointerup', event => {
   windowHandle.releasePointerCapture(event.pointerId);
 });
 
-setMinuteHandToStar(minuteStarIndex);
-setInterval(tickMinuteHand, 1000);
 updatePuzzleDisplay();
-updateHourHand(window.innerWidth * 0.72, window.innerHeight * 0.30);
+updateClockFromPointer(window.innerWidth * 0.72, window.innerHeight * 0.30);
