@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Yua's personal portfolio, inspirations, gear, goals and projects.">
+  <title>Yua Profo V2</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="scene" id="scene">
+    <div class="bg-image" aria-hidden="true"></div>
+    <div class="ambient-glow" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="clock-shell" id="clockShell" aria-label="Profile navigation">
+      <div class="clock-face">
+        <div class="outer-ring-code" aria-hidden="true">
+          <div class="outer-ring-segments"></div>
+        </div>
+        <div class="character-stage" id="characterStage" aria-hidden="true">
+          <img class="character-figure is-active" data-character="0" src="assets/characters/yua-character.png" alt="">
+        </div>
+
+        <img class="center-ring" src="assets/center-ring.png" alt="" aria-hidden="true">
+
+        <div class="hand-rotator minute-rotator" id="minuteRotator" aria-hidden="true">
+          <img src="assets/mins_centered.png" alt="">
+        </div>
+
+        <div class="hand-rotator hour-rotator" id="hourRotator" aria-hidden="true">
+          <img src="assets/hours_centered.png" alt="">
+        </div>
+
+        <div class="center-cap" aria-hidden="true"></div>
+        <div class="center-cap center-cap-inner" aria-hidden="true"></div>
+
+        <nav class="menu" id="menu" aria-label="Profile sections">
+          <button class="menu-item" data-index="0" data-title="ABOUT YUA">ABOUT</button>
+          <button class="menu-item" data-index="1" data-title="INSPIRATION">INSPIRATION</button>
+          <button class="menu-item" data-index="2" data-title="GEAR LIST">GEAR</button>
+          <button class="menu-item" data-index="3" data-title="GOALS">GOALS</button>
+          <button class="menu-item" data-index="4" data-title="PROJECTS">PROJECTS</button>
+          <button class="menu-item secret-item" id="secretMenuItem" data-index="5" data-title="DEEP DOWN..." aria-hidden="true">DEEP DOWN...</button>
+        </nav>
+      </div>
+    </section>
+
+    <section class="floating-window window-size-about" id="floatingWindow" aria-live="polite">
+      <div class="window-topbar" id="windowHandle">
+        <div class="window-title-wrap">
+          <span class="window-mark">✦</span>
+          <span class="window-title" id="windowTitle">ABOUT YUA</span>
+        </div>
+        <button class="window-close" id="windowClose" type="button" aria-label="Close">×</button>
+      </div>
+
+      <div class="window-banner" aria-hidden="true"></div>
+
+      <div class="window-main">
+        <nav class="window-toolbar" id="windowToolbar" aria-label="Pages inside this window">
+          <button class="subpage-button active" type="button" data-subpage="0" aria-label="Open page 1" title="Page 1">✦</button>
+          <button class="subpage-button" type="button" data-subpage="1" aria-label="Open page 2" title="Page 2">†</button>
+          <button class="subpage-button" type="button" data-subpage="2" aria-label="Open page 3" title="Page 3">‡</button>
+          <button class="subpage-button" type="button" data-subpage="3" aria-label="Open page 4" title="Page 4">☩</button>
+        </nav>
+
+        <div class="window-content" id="windowContent">
+          <p class="eyebrow" id="contentEyebrow">PROFILE FILE / PAGE 1</p>
+          <h1 id="contentHeading">HELLO, I'M YUA</h1>
+          <div class="content-body" id="contentBody"></div>
+          <div class="content-rule"></div>
+          <p class="meta">INDEX / <span id="pageIndex">001-1</span> / FRAGMENTS <span id="puzzleCount">0/5</span></p>
+        </div>
+      </div>
+
+      <button class="puzzle-piece" id="puzzlePiece" type="button" aria-label="Collect hidden puzzle piece">
+        <img src="assets/puzzle-piece.webp" alt="">
+      </button>
+    </section>
+
+    <div class="collect-toast" id="collectToast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
