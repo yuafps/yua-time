@@ -7,8 +7,8 @@
   --window-bg: rgba(5, 7, 12, 0.92);
 }
 
-* { box-sizing: border-box; }
-html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--ivory); font-family: "Courier New", Courier, monospace; }
+* { box-sizing: border-box; }ier
+html, body { width: 100%; min-height: 100%; margin: 0; background: var(--bg); color: var(--ivory); font-family: "Courier New", Cour, monospace; }
 body { overflow: hidden; }
 button { font: inherit; }
 
@@ -769,7 +769,6 @@ button { font: inherit; }
 .clock-shell { z-index: 3; }
 
 
-*/
 .character-stage {
   position: absolute;
   left: calc((var(--clock-size) / 2) - 63vw);
