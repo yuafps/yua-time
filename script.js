@@ -233,7 +233,6 @@ const windowSections = [
 
 const PUZZLE_STORAGE_KEY = 'yuaProfoV2PuzzlePiecesV5';
 const PUZZLE_TOTAL = 5;
-// About p1, Inspiration p3, Gear p4, Goals p1, Projects p2.
 const PUZZLE_SUBPAGES = [0, 2, 3, 0, 1];
 const WINDOW_SIZE_CLASSES = windowSections.map(section => section.sizeClass);
 let currentPageIndex = -1;
@@ -541,8 +540,7 @@ windowHandle.addEventListener('pointerup', event => {
 updatePuzzleDisplay();
 updateClockFromPointer(window.innerWidth * 0.72, window.innerHeight * 0.30);
 
-// Hidden fragments react to nearby cursor movement so they read as collectible objects,
-// while staying subtle enough to fit the clock/window aesthetic.
+
 function updatePuzzleMagnet(clientX, clientY) {
   if (!puzzlePiece.classList.contains('is-visible') || puzzlePiece.classList.contains('is-collected')) return;
 
