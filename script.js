@@ -540,3 +540,43 @@ windowHandle.addEventListener('pointerup', event => {
 
 updatePuzzleDisplay();
 updateClockFromPointer(window.innerWidth * 0.72, window.innerHeight * 0.30);
+
+// Hidden fragments react to nearby cursor movement so they read as collectible objects,
+// while staying subtle enough to fit the clock/window aesthetic.
+function updatePuzzleMagnet(clientX, clientY) {
+  if (!puzzlePiece.classList.contains('is-visible') || puzzlePiece.classList.contains('is-collected')) return;
+
+  const rect = puzzlePiece.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+  const dx = clientX - centerX;
+  const dy = clientY - centerY;
+  const distance = Math.hypot(dx, dy);
+  const radius = 190;
+
+  if (distance >= radius) {
+    puzzlePiece.style.setProperty('--mag-x', '0px');
+    puzzlePiece.style.setProperty('--mag-y', '0px');
+    puzzlePiece.style.setProperty('--cursor-tilt', '0deg');
+    return;
+  }
+
+  const strength = 1 - distance / radius;
+  const moveX = Math.max(-7, Math.min(7, dx * 0.045 * strength));
+  const moveY = Math.max(-7, Math.min(7, dy * 0.045 * strength));
+  const tilt = Math.max(-5, Math.min(5, dx * 0.025 * strength));
+
+  puzzlePiece.style.setProperty('--mag-x', `${moveX.toFixed(2)}px`);
+  puzzlePiece.style.setProperty('--mag-y', `${moveY.toFixed(2)}px`);
+  puzzlePiece.style.setProperty('--cursor-tilt', `${tilt.toFixed(2)}deg`);
+}
+
+scene.addEventListener('pointermove', event => {
+  updatePuzzleMagnet(event.clientX, event.clientY);
+});
+
+scene.addEventListener('pointerleave', () => {
+  puzzlePiece.style.setProperty('--mag-x', '0px');
+  puzzlePiece.style.setProperty('--mag-y', '0px');
+  puzzlePiece.style.setProperty('--cursor-tilt', '0deg');
+});
